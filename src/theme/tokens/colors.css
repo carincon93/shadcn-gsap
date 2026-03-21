@@ -1,0 +1,41 @@
+/* ============================================
+   Theme Color Tokens
+   Custom color palette extending shadcn defaults
+   ============================================ */
+
+:root {
+  /* Brand Colors */
+  --theme-brand-50: oklch(0.97 0.01 250);
+  --theme-brand-100: oklch(0.93 0.03 250);
+  --theme-brand-200: oklch(0.86 0.06 250);
+  --theme-brand-300: oklch(0.76 0.10 250);
+  --theme-brand-400: oklch(0.65 0.15 250);
+  --theme-brand-500: oklch(0.55 0.20 250);
+  --theme-brand-600: oklch(0.48 0.22 250);
+  --theme-brand-700: oklch(0.40 0.18 250);
+  --theme-brand-800: oklch(0.33 0.14 250);
+  --theme-brand-900: oklch(0.27 0.10 250);
+
+  /* Accent Gradient Points */
+  --theme-gradient-start: oklch(0.65 0.25 280);
+  --theme-gradient-mid: oklch(0.60 0.22 250);
+  --theme-gradient-end: oklch(0.55 0.20 220);
+
+  /* Semantic Colors */
+  --theme-success: oklch(0.65 0.18 145);
+  --theme-warning: oklch(0.75 0.15 75);
+  --theme-info: oklch(0.65 0.18 230);
+  --theme-error: oklch(0.60 0.22 25);
+
+  /* Surface Colors (Glassmorphism) */
+  --theme-glass-bg: oklch(1 0 0 / 8%);
+  --theme-glass-border: oklch(1 0 0 / 15%);
+  --theme-glass-shadow: oklch(0 0 0 / 10%);
+}
+
+.dark {
+  /* Surface Colors (Glassmorphism - Dark) */
+  --theme-glass-bg: oklch(1 0 0 / 5%);
+  --theme-glass-border: oklch(1 0 0 / 10%);
+  --theme-glass-shadow: oklch(0 0 0 / 30%);
+}

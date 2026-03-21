@@ -1,0 +1,73 @@
+---
+/**
+ * ThemeLayout – Base layout applying the full theme system
+ * Imports all design tokens, sets up global styles, and provides the HTML shell
+ */
+import "../../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "My Shadcn Theme",
+  description = "A beautiful theme built with shadcn/ui, Astro, and GSAP",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+
+    <!-- Initialize GSAP ScrollTrigger animations -->
+    <script>
+      import { initScrollAnimations } from "../animations/scroll-triggers";
+      document.addEventListener("DOMContentLoaded", () => {
+        initScrollAnimations();
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* Global theme styles */
+  html {
+    scroll-behavior: smooth;
+    height: 100%;
+  }
+
+  body {
+    font-family: var(--theme-font-body);
+    line-height: var(--theme-leading-normal);
+    overflow-x: hidden;
+    height: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--theme-font-display);
+    line-height: var(--theme-leading-tight);
+    letter-spacing: var(--theme-tracking-tight);
+  }
+</style>
