@@ -51,6 +51,22 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  --animate-bounce-scale: bounce-scale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  @keyframes bounce-scale {
+    0% {
+      opacity: 0;
+      scale: 0.95;
+    }
+    70% {
+      opacity: 1;
+      scale: 1.1;
+    }
+    100% {
+      opacity: 1;
+      scale: 1;
+    }
+  }
 }
 
 :root {
