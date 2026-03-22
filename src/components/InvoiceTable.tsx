@@ -1,4 +1,5 @@
 import * as React from "react"
+import gsap from "gsap"
 import { useStore } from '@nanostores/react'
 import {
   Table,
@@ -19,6 +20,21 @@ import { calculateTotal } from "@/lib/utils"
 export function SelectedInvoicesTable() {
   const $invoicesStore = useStore(invoicesStore)
   const total = calculateTotal($invoicesStore)
+
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>, invoice: any) => {
+    const row = (e.currentTarget as HTMLElement).closest('tr')
+    if (row) {
+      gsap.to(row, {
+        y: -20,
+        opacity: 0,
+        duration: 0.5,
+        ease: "bounce.in",
+        onComplete: () => toggleInvoice(invoice)
+      })
+    } else {
+      toggleInvoice(invoice)
+    }
+  }
 
   return (
     <Table>
@@ -43,7 +59,7 @@ export function SelectedInvoicesTable() {
             <TableCell>{invoice.paymentMethod}</TableCell>
             <TableCell className="text-right">{invoice.totalAmount}</TableCell>
             <TableCell>
-              <Button variant="destructive" size="sm" onClick={() => toggleInvoice(invoice)}>
+              <Button variant="destructive" size="sm" onClick={(e) => handleRemove(e, invoice)}>
                 Remove
               </Button>
             </TableCell>

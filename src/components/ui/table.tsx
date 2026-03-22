@@ -1,4 +1,6 @@
 import * as React from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 
 import { cn } from "@/lib/utils"
 
@@ -51,8 +53,20 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
 }
 
 function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
+  const rowRef = React.useRef<HTMLTableRowElement>(null)
+
+  useGSAP(() => {
+    gsap.from(rowRef.current, {
+      y: -20,
+      opacity: 0,
+      duration: 0.5,
+      ease: "bounce.out",
+    })
+  }, { scope: rowRef })
+
   return (
     <tr
+      ref={rowRef}
       data-slot="table-row"
       className={cn(
         "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
