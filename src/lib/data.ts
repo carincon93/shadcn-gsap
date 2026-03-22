@@ -1,4 +1,11 @@
-export const invoices = [
+export type Invoice = {
+    invoice: string
+    paymentStatus: string
+    totalAmount: string
+    paymentMethod: string
+}
+
+export const invoices: Invoice[] = [
     {
         invoice: "INV001",
         paymentStatus: "Paid",

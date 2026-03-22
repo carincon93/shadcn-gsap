@@ -2,7 +2,11 @@
 import ThemeLayout from "../theme/layouts/ThemeLayout.astro";
 import ThemeCard from "../theme/components/ThemeCard.astro";
 import { Button } from "@/components/ui";
-import { InvoiceTable, DialogComp as Dialog } from "@/components/";
+import {
+  SelectedInvoicesTable,
+  InvoiceTable,
+  DialogComp as Dialog,
+} from "@/components/";
 ---
 
 <ThemeLayout
@@ -14,19 +18,27 @@ import { InvoiceTable, DialogComp as Dialog } from "@/components/";
     <div
       class="dark flex-1 bg-background text-foreground flex items-center justify-center"
     >
-      <Button client:load variant="glass" glowColor="blue">
-        Glass Button
-      </Button>
+      <div class="flex flex-col gap-4">
+        <div class="gap-6">
+          <Button client:load variant="glass" glowColor="blue">
+            Glass Button
+          </Button>
 
-      <Dialog client:load />
+          <Dialog client:load />
+        </div>
+
+        <SelectedInvoicesTable client:load />
+      </div>
     </div>
 
     <!-- White theme -->
     <div class="flex-1 bg-white h-full flex items-center justify-center">
       <div class="flex flex-col gap-4">
-        <Button client:load variant="glass" glowColor="yellow">
-          $179.900 <small>COP</small>
-        </Button>
+        <div class="gap-6">
+          <Button client:load variant="glass" glowColor="yellow">
+            $179.900 <small>COP</small>
+          </Button>
+        </div>
 
         <InvoiceTable client:load />
       </div>
