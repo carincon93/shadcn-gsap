@@ -8,13 +8,13 @@ import {
     Button
 } from "@/components/ui";
 
-export function DialogComp() {
+export function DialogComp({ className }: { className?: string }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
                 <Button variant="glass" glowColor="lime">Open Dialog</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className={className}>
                 <DialogHeader>
                     <DialogTitle>Dialog Title</DialogTitle>
                     <DialogDescription> Dialog Description </DialogDescription>
