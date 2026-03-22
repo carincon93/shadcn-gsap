@@ -64,6 +64,7 @@ const Button = React.forwardRef<
     const innerRef = React.useRef<HTMLButtonElement>(null)
     const svgRef = React.useRef<SVGSVGElement>(null)
     const wrapperRef = React.useRef<HTMLSpanElement>(null)
+    const [buttonSize, setButtonSize] = React.useState<{ width: number; height: number } | null>(null)
 
     // Merge refs so both forwardRef and innerRef work
     React.useImperativeHandle(forwardedRef, () => innerRef.current!)
@@ -74,6 +75,7 @@ const Button = React.forwardRef<
       const wrapper = wrapperRef.current
       if (!button || !svg || !wrapper) return
 
+      setButtonSize({ width: button.offsetWidth, height: button.offsetHeight })
       const xTo = gsap.quickTo(svg, "x", { duration: 0.5, ease: "power2.out" })
       const yTo = gsap.quickTo(svg, "y", { duration: 0.5, ease: "power2.out" })
 
@@ -105,12 +107,13 @@ const Button = React.forwardRef<
           <>
             <span
               ref={wrapperRef}
-              className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-full blur-lg"
+              className={`pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-full ${buttonSize && buttonSize?.width < 100 ? 'blur-[10px]' : 'blur-lg'}`}
             >
               <svg
                 ref={svgRef}
                 viewBox="0 0 100 100"
-                className="absolute right-[60%] translate-x-[50%] size-16"
+                className="translate-x-[50%]"
+                style={{ width: buttonSize ? buttonSize.width / 2 : undefined, height: buttonSize?.height }}
               >
                 <defs>
                   <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="0%">
