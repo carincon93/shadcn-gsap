@@ -1,6 +1,8 @@
 import * as React from "react"
 import gsap from "gsap"
 import { useStore } from '@nanostores/react'
+import { TrashIcon } from "lucide-react"
+
 import {
   Table,
   TableBody,
@@ -59,8 +61,8 @@ export function SelectedInvoicesTable() {
             <TableCell>{invoice.paymentMethod}</TableCell>
             <TableCell className="text-right">{invoice.totalAmount}</TableCell>
             <TableCell>
-              <Button variant="destructive" size="sm" onClick={(e) => handleRemove(e, invoice)}>
-                Remove
+              <Button variant="glass" glowColor="red" onClick={(e) => handleRemove(e, invoice)}>
+                <TrashIcon />
               </Button>
             </TableCell>
           </TableRow>
@@ -98,7 +100,7 @@ export function InvoiceTable() {
       </TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Select</TableHead>
+          <TableHead className="w-[50px]">Select</TableHead>
           <TableHead className="w-[100px]">Invoice</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Method</TableHead>
