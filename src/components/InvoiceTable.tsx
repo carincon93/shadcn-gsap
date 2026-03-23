@@ -15,7 +15,7 @@ import {
   Checkbox,
   Button,
 } from "@/components/ui"
-import { invoices as initialInvoices } from "@/lib/data"
+import { invoices as initialInvoices, type Invoice } from "@/lib/data"
 import { invoicesStore, toggleInvoice } from "@/stores/invoicesStore"
 import { calculateTotal } from "@/lib/utils"
 
@@ -23,23 +23,48 @@ export function SelectedInvoicesTable() {
   const $invoicesStore = useStore(invoicesStore)
   const total = calculateTotal($invoicesStore)
 
-  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>, invoice: any) => {
-    const row = (e.currentTarget as HTMLElement).closest('tr')
-    if (row) {
-      gsap.to(row, {
-        y: -20,
-        opacity: 0,
-        duration: 0.5,
-        ease: "bounce.in",
-        onComplete: () => toggleInvoice(invoice)
-      })
-    } else {
-      toggleInvoice(invoice)
-    }
+  // 1. Maintain a local copy of the invoices to render.
+  // This allows us to keep the row in the DOM while it animates out!
+  const [localInvoices, setLocalInvoices] = React.useState($invoicesStore)
+  const tableRef = React.useRef<HTMLTableElement>(null)
+
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>, invoice: Invoice) => {
+    // Only toggle the store. The useEffect will detect the deletion and trigger the animation.
+    toggleInvoice(invoice)
   }
 
+  React.useEffect(() => {
+    // 2. Find any invoices that are still rendered locally, but missing from the actual store
+    const deletedInvoices = localInvoices.filter(inv => !$invoicesStore.includes(inv));
+
+    if (deletedInvoices.length > 0) {
+      deletedInvoices.forEach(deletedInvoice => {
+        // Find the index in our local array to target the correct DOM row
+        const index = localInvoices.findIndex(inv => inv.invoice === deletedInvoice.invoice);
+        const rows = tableRef.current?.querySelectorAll("tbody tr");
+        const rowToAnimate = rows?.[index];
+
+        if (rowToAnimate) {
+          gsap.to(rowToAnimate, {
+            y: -20,
+            opacity: 0,
+            duration: 0.5,
+            ease: "bounce.in",
+            onComplete: () => {
+              // 3. Animation finished! Safely remove it from local state to unmount it from React
+              setLocalInvoices(prev => prev.filter(inv => inv.invoice !== deletedInvoice.invoice));
+            }
+          })
+        }
+      });
+    } else {
+      // If an invoice was added, just sync local state immediately so it renders
+      setLocalInvoices($invoicesStore);
+    }
+  }, [$invoicesStore]); // We ONLY track changes from the global store
+
   return (
-    <Table>
+    <Table ref={tableRef}>
       <TableCaption>
         A list of your selected invoices (Interactive).
       </TableCaption>
@@ -53,7 +78,8 @@ export function SelectedInvoicesTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {$invoicesStore.map((invoice) => (
+        {/* Render localInvoices instead of $invoicesStore to delay unmounting */}
+        {localInvoices.map((invoice) => (
           <TableRow key={invoice.invoice} className="hover:bg-muted/50 transition-colors">
 
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
