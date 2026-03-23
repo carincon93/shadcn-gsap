@@ -6,6 +6,7 @@ import {
   SelectedInvoicesTable,
   InvoiceTable,
   DialogComp as Dialog,
+  AlertDialogComp as AlertDialog,
 } from "@/components/";
 ---
 
@@ -25,6 +26,7 @@ import {
           </Button>
 
           <Dialog client:load className="dark" />
+          <AlertDialog client:load className="dark" />
         </div>
 
         <SelectedInvoicesTable client:load />
@@ -38,10 +40,11 @@ import {
       <div class="flex flex-col gap-4 w-full p-6">
         <div class="gap-6">
           <Button client:load variant="glass" glowColor="yellow">
-            $179.900 <small>COP</small>
+            Buy for $179.900 <small>COP</small>
           </Button>
 
           <Dialog client:load />
+          <AlertDialog client:load />
         </div>
 
         <InvoiceTable client:load />
