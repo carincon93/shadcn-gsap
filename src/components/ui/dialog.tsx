@@ -59,21 +59,25 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl dark:bg-background/80 dark:text-foreground bg-background/80 text-foreground p-4 text-sm duration-50 outline-none sm:max-w-sm data-[state=open]:animate-bounce-scale data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+          "overflow-hidden fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl dark:bg-background dark:text-foreground bg-background text-foreground p-4 text-sm outline-none sm:max-w-sm data-[state=open]:animate-bounce-scale data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
           className
         )}
         {...props}
       >
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.08]"
+          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
+        />
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
             <Button
               variant="glass"
               glowColor="red"
-              className="absolute top-2 right-2 rounded-full w-[50px]"
+              className="absolute top-2 right-2 rounded-full w-[50px] dark:hover:bg-transparent hover:bg-transparent hover:text-foreground bg-foreground dark:bg-background/20 border border-border"
               size="icon-sm"
             >
-              <XIcon className="dark:text-foreground text-background" />
+              <XIcon />
               <span className="sr-only">Close</span>
             </Button>
           </DialogPrimitive.Close>
