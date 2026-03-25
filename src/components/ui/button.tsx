@@ -95,12 +95,12 @@ const Button = React.forwardRef<
 
     return (
       <Comp
+        ref={innerRef}
         data-slot="button"
         data-variant={variant}
         data-size={size}
         style={{ "--glow-color": glowColor } as React.CSSProperties}
         {...props}
-        ref={innerRef}
         className={cn(buttonVariants({ variant, size, className }))}
       >
         {!asChild ? (
