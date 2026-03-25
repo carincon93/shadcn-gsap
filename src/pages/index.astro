@@ -8,12 +8,17 @@ import {
   DialogComp as Dialog,
   AlertDialogComp as AlertDialog,
 } from "@/components/";
+import { NavigationMenuComp as NavigationMenu } from "@/components/NavigationMenu";
+
+import "@/theme/tokens/components.css";
 ---
 
 <ThemeLayout
   title="My Shadcn Theme — Showcase"
   description="A stunning theme built with shadcn/ui, Astro, and GSAP animations"
 >
+  <NavigationMenu client:load />
+
   <div class="flex h-full">
     <!-- Black theme -->
     <div
