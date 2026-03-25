@@ -89,7 +89,7 @@ export function NavigationMenuComp() {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                        <a href="/docs">Docs</a>
+                        <a href="/">Docs</a>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
             </NavigationMenuList>

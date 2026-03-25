@@ -16,39 +16,62 @@ function NavigationMenu({
   viewport?: boolean
 }) {
 
-  const innerRef = React.useRef<React.ElementRef<typeof NavigationMenuPrimitive.Root>>(null)
+  const navRef = React.useRef<React.ComponentRef<typeof NavigationMenuPrimitive.Root>>(null)
   const svgRef = React.useRef<SVGSVGElement>(null)
+  const activeItemRef = React.useRef<HTMLElement | null>(null)
 
   React.useEffect(() => {
     const svg = svgRef.current
-    const wrapper = innerRef.current
-    if (!svg || !wrapper) return
+    const navWrapper = navRef.current
+    if (!svg || !navWrapper) return
 
     const xTo = gsap.quickTo(svg, "x", { duration: 0.3, ease: "power2.out" })
 
-    function handleMouseEnter(e: MouseEvent) {
-      if (!wrapper) return
-      const target = e.target as HTMLElement
-      if (!target.closest('[data-slot="navigation-menu-item"]')) return
-
+    const moveSvgElement = (target: HTMLElement) => {
+      activeItemRef.current = target
       const { left, width } = target.getBoundingClientRect()
-      xTo(((left - wrapper.getBoundingClientRect().left) + width / 2) - 75)
+      xTo(((left - navWrapper.getBoundingClientRect().left) + width / 2) - 75)
     }
 
-    (wrapper.querySelectorAll('[data-slot="navigation-menu-item"]') as NodeListOf<HTMLElement>).forEach((item) => {
-      item.addEventListener("mouseenter", handleMouseEnter)
+    const handleInteraction = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      const item = target.closest('[data-slot="navigation-menu-item"]') as HTMLElement
+      if (item) {
+        moveSvgElement(item)
+      }
+    }
+
+    const items = navWrapper.querySelectorAll('[data-slot="navigation-menu-item"]') as NodeListOf<HTMLElement>
+    items.forEach((item) => {
+      item.addEventListener("mouseenter", handleInteraction)
+      item.addEventListener("click", handleInteraction)
     })
 
+    const observer = new ResizeObserver(() => {
+      if (activeItemRef.current) {
+        moveSvgElement(activeItemRef.current)
+
+        const rect = activeItemRef.current.getBoundingClientRect()
+        const navbarLeft = navWrapper.getBoundingClientRect().left
+
+        // Also update the viewport offset during resize
+        navWrapper.style.setProperty('--custom-viewport-offset', `${rect.left - navbarLeft}px`)
+      }
+    })
+    observer.observe(navWrapper)
+
     return () => {
-      (wrapper.querySelectorAll('[data-slot="navigation-menu-item"]') as NodeListOf<HTMLElement>).forEach((item) => {
-        item.removeEventListener("mouseenter", handleMouseEnter)
+      items.forEach((item) => {
+        item.removeEventListener("mouseenter", handleInteraction)
+        item.removeEventListener("click", handleInteraction)
       })
+      observer.disconnect()
     }
   }, [])
 
   return (
     <NavigationMenuPrimitive.Root
-      ref={innerRef}
+      ref={navRef}
       data-slot="navigation-menu"
       data-viewport={viewport}
       className={cn(
@@ -118,10 +141,9 @@ function NavigationMenuItem({
       const navbarLeft = nav.getBoundingClientRect().left
 
       const navElement = el.closest("nav")
+      if (!navElement) return
 
-      if (navElement) {
-        navElement.style.setProperty('--custom-viewport-offset', `${rect.left - navbarLeft}px`)
-      }
+      navElement.style.setProperty('--custom-viewport-offset', `${rect.left - navbarLeft}px`)
     }
 
     el.addEventListener("mouseenter", handleSubMenuEffect)
@@ -189,7 +211,7 @@ function NavigationMenuViewport({
       className={cn(
         "absolute top-full isolate z-50 flex"
       )}
-
+      // data-slot="navigation-menu-viewport"
       style={{
         left: "var(--custom-viewport-offset, 0px)",
       }}
